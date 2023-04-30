@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: User API
+  description: A simple API to manage users with email address and start date attributes.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    get:
+      summary: Retrieve a list of users
+      parameters:
+        - in: query
+          name: filter
+          schema:
+            type: string
+          description: Filter users based on certain criteria (optional)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{email_address}:
+    get:
+      summary: Retrieve a specific user by email address
+      parameters:
+        - in: path
+          name: email_address
+          schema:
+            type: string
+          required: true
+          description: Email address of the user to retrieve
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update a user's email address and start date
+      parameters:
+        - in: path
+          name: email_address
+          schema:
+            type: string
+          required: true
+          description: Email address of the user to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: email_address
+          schema:
+            type: string
+          required: true
+          description: Email address of the user to delete
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        email_address:
+          type: string
+          format: email
+        start_date:
+          type: string
+          format: date
+      required:
+        - email_address
+        - start_date
+
